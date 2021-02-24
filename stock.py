@@ -13,10 +13,19 @@ class Location(metaclass=PoolMeta):
 
     unique_children = fields.Boolean("Unique children")
 
+    @staticmethod
+    def default_unique_children():
+        return False
+
     @classmethod
     def validate(cls, locations):
         super(Location, cls).validate(locations)
         for location in locations:
-            if location.unique_children and len(location.childs) > 1:
+            if location.parent:
+                if (location.parent.unique_children and
+                    len(location.parent.childs) > 1):
+                    raise UserError(
+                        gettext('stock_location_only_child.msg_only_child'))
+            elif location.unique_children and len(location.childs) > 1:
                 raise UserError(
                     gettext('stock_location_only_child.msg_only_child'))
