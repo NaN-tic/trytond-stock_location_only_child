@@ -20,7 +20,7 @@ class Location(metaclass=PoolMeta):
         super(Location, cls).validate(locations)
         for location in locations:
             if (location.parent and location.parent.unique_children and
-                len(location.parent.childs) > 1):
+                    len(location.parent.childs) > 1):
                 raise UserError(
                     gettext('stock_location_only_child.msg_only_child',
                         location=location.rec_name))
