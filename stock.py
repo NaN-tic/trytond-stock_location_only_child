@@ -3,7 +3,7 @@
 from trytond.i18n import gettext
 from trytond.model import fields
 from trytond.pool import PoolMeta
-from trytond.exceptions import UserError
+from trytond.model.exceptions import ValidationError
 
 
 class Location(metaclass=PoolMeta):
@@ -21,11 +21,11 @@ class Location(metaclass=PoolMeta):
         for location in locations:
             if (location.parent and location.parent.unique_children and
                     len(location.parent.childs) > 1):
-                raise UserError(
+                raise ValidationError(
                     gettext('stock_location_only_child.msg_only_child',
                         location=location.rec_name))
 
             if location.unique_children and len(location.childs) > 1:
-                raise UserError(
+                raise ValidationError(
                     gettext('stock_location_only_child.msg_only_child',
                         location=location.rec_name))
